@@ -18,20 +18,18 @@ import (
 
 type rootT struct {
 	cli.Helper
-	Gap     int         `cli:"g,gap" usage:"Gap in days to be considered as different group/vault" dft:"5"`
-	Pod     int         `cli:"p,pod" usage:"Minimum number of picture to have before splitting to a different group/vault" dft:"15"`
 	Verbose cli.Counter `cli:"v,verbose" usage:"Verbose mode (Multiple -v options increase the verbosity.)"`
 }
 
 var root = &cli.Command{
-	Name: "picv",
-	Desc: "picture vault\nbuilt on " + buildTime,
-	Text: "Tool to deal with camera pictures and put them in vault" +
-		"\n\nUsage:\n  picv [Options] dir [dirs...]",
-	Argv: func() interface{} { return new(rootT) },
-	Fn:   picv,
+	Name:   "picv",
+	Desc:   "picture vault\nbuilt on " + buildTime,
+	Text:   "Tool to deal with camera pictures and put them in vault",
+	Global: true,
+	Argv:   func() interface{} { return new(rootT) },
+	Fn:     picv,
 
-	CanSubRoute: true,
+	NumArg: cli.AtLeast(1),
 }
 
 // Template for main starts here
@@ -52,7 +50,9 @@ var root = &cli.Command{
 //  	cli.SetUsageStyle(cli.ManualStyle) // up-down, for left-right, use NormalStyle
 //  	//NOTE: You can set any writer implements io.Writer
 //  	// default writer is os.Stdout
-//  	if err := cli.Root(root,).Run(os.Args[1:]); err != nil {
+//  	if err := cli.Root(root,
+//  		cli.Tree(cutDef),
+//  		cli.Tree(archDef)).Run(os.Args[1:]); err != nil {
 //  		fmt.Fprintln(os.Stderr, err)
 //  	}
 //  	fmt.Println("")
@@ -71,3 +71,49 @@ var root = &cli.Command{
 //  }
 
 // Template for CLI handling starts here
+
+////////////////////////////////////////////////////////////////////////////
+// cut
+
+// func cutCLI(ctx *cli.Context) error {
+// 	rootArgv = ctx.RootArgv().(*rootT)
+// 	argv := ctx.Argv().(*cutT)
+// 	fmt.Printf("[cut]:\n  %+v\n  %+v\n  %v\n", rootArgv, argv, ctx.Args())
+// 	return nil
+// }
+
+type cutT struct {
+	Gap int `cli:"g,gap" usage:"Gap in days to be considered as different group/vault" dft:"5"`
+	Pod int `cli:"p,pod" usage:"Minimum number of picture to have before splitting to a different group/vault" dft:"15"`
+}
+
+var cutDef = &cli.Command{
+	Name: "cut",
+	Desc: "Separate picture into groups",
+	Argv: func() interface{} { return new(cutT) },
+	Fn:   cutCLI,
+
+	CanSubRoute: true,
+}
+
+////////////////////////////////////////////////////////////////////////////
+// arch
+
+// func archCLI(ctx *cli.Context) error {
+// 	rootArgv = ctx.RootArgv().(*rootT)
+// 	argv := ctx.Argv().(*archT)
+// 	fmt.Printf("[arch]:\n  %+v\n  %+v\n  %v\n", rootArgv, argv, ctx.Args())
+// 	return nil
+// }
+
+type archT struct {
+}
+
+var archDef = &cli.Command{
+	Name: "arch",
+	Desc: "Archive groups of picture into vaults",
+	Argv: func() interface{} { return new(archT) },
+	Fn:   archCLI,
+
+	CanSubRoute: true,
+}

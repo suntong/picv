@@ -20,7 +20,7 @@ import (
 
 var (
 	progname  = "picv"
-	VERSION   = "0.1.1"
+	VERSION   = "0.2.0"
 	buildTime = "2017-06-03"
 )
 
@@ -31,8 +31,21 @@ var (
 func main() {
 	//NOTE: You can set any writer implements io.Writer
 	// default writer is os.Stdout
-	if err := cli.Root(root).Run(os.Args[1:]); err != nil {
+	if err := cli.Root(root,
+		cli.Tree(cutDef),
+		cli.Tree(archDef)).Run(os.Args[1:]); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	}
 	fmt.Println("")
+}
+
+//==========================================================================
+// Main dispatcher
+
+func picv(ctx *cli.Context) error {
+	ctx.JSON(ctx.RootArgv())
+	ctx.JSON(ctx.Argv())
+	fmt.Println()
+
+	return nil
 }

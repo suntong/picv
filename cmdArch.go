@@ -15,27 +15,12 @@ import (
 ////////////////////////////////////////////////////////////////////////////
 // Constant and data type/structure definitions
 
-type OptsT struct {
-	Gap     int
-	Pod     int
-	Verbose int
-}
-
-var Opts OptsT
-
 ////////////////////////////////////////////////////////////////////////////
-// cut
+// arch
 
-func cutCLI(ctx *cli.Context) error {
+func archCLI(ctx *cli.Context) error {
 	rootArgv := ctx.RootArgv().(*rootT)
-	argv := ctx.Argv().(*cutT)
-	Opts.Gap, Opts.Pod, Opts.Verbose = argv.Gap, argv.Pod, rootArgv.Verbose.Value()
-	ctx.JSON(Opts)
-	fmt.Println()
-
-	return picVault()
-}
-
-func picVault() error {
+	argv := ctx.Argv().(*archT)
+	fmt.Printf("[arch]:\n  %+v\n  %+v\n  %v\n", rootArgv, argv, ctx.Args())
 	return nil
 }

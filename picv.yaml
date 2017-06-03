@@ -6,12 +6,11 @@ PackageName: main
 Name: picv
 Desc: "picture vault"
 Text: Tool to deal with camera pictures and put them in vault
-#NumArg
+Global: true
 #NumOption: cli.AtLeast(1)
-# Handle the rest of CLI args ourselves
-CanSubRoute: true
+NumArg: cli.AtLeast(1)
 
-UsageLead: "Usage:\\n  picv [Options] dir [dirs...]"
+#UsageLead: "Usage:\\n  picv [Options] dir [dirs...]"
 
 Options:
   # - Name: Dir
@@ -20,19 +19,37 @@ Options:
   #   Usage: pic source dir
   #   Value: "./"
 
-  - Name: Gap
-    Type: int
-    Flag: g,gap
-    Usage: Gap in days to be considered as different group/vault
-    Value: 5
-    
-  - Name: Pod
-    Type: int
-    Flag: p,pod
-    Usage: Minimum number of picture to have before splitting to a different group/vault
-    Value: 15
-
   - Name: Verbose
     Type: cli.Counter
     Flag: v,verbose
     Usage: Verbose mode (Multiple -v options increase the verbosity.)
+
+Command:
+
+  - Name: cut
+    Desc: "Separate picture into groups"
+    # NumArg: cli.AtLeast(1)
+    #NumOption: cli.AtLeast(1)
+    # Handle the rest of CLI args ourselves
+    CanSubRoute: true
+
+    Options:
+      - Name: Gap
+        Type: int
+        Flag: g,gap
+        Usage: Gap in days to be considered as different group/vault
+        Value: 5
+    
+      - Name: Pod
+        Type: int
+        Flag: p,pod
+        Usage: Minimum number of picture to have before splitting to a different group/vault
+        Value: 15
+
+  - Name: arch
+    Desc: "Archive groups of picture into vaults"
+    # NumArg: cli.AtLeast(1)
+    #NumOption: cli.AtLeast(1)
+    # Handle the rest of CLI args ourselves
+    CanSubRoute: true
+
