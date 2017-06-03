@@ -1,0 +1,38 @@
+# program name, name for the executable
+ProgramName: picv
+
+PackageName: main
+
+Name: picv
+Desc: "picture vault"
+Text: Tool to deal with camera pictures and put them in vault
+#NumArg
+#NumOption: cli.AtLeast(1)
+# Handle the rest of CLI args ourselves
+CanSubRoute: true
+
+UsageLead: "Usage:\\n  picv [Options] dir [dirs...]"
+
+Options:
+  # - Name: Dir
+  #   Type: string
+  #   Flag: '*d,dir'
+  #   Usage: pic source dir
+  #   Value: "./"
+
+  - Name: Gap
+    Type: int
+    Flag: g,gap
+    Usage: Gap in days to be considered as different group/vault
+    Value: 5
+    
+  - Name: Pod
+    Type: int
+    Flag: p,pod
+    Usage: Minimum number of picture to have before splitting to a different group/vault
+    Value: 15
+
+  - Name: Verbose
+    Type: cli.Counter
+    Flag: v,verbose
+    Usage: Verbose mode (Multiple -v options increase the verbosity.)
