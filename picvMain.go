@@ -20,7 +20,7 @@ import (
 
 var (
 	progname  = "picv"
-	VERSION   = "0.1.0"
+	VERSION   = "0.1.1"
 	buildTime = "2017-06-03"
 )
 
