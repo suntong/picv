@@ -19,6 +19,7 @@ import (
 // Constant and data type/structure definitions
 
 type OptsT struct {
+	DFN     string
 	Gap     int
 	Pod     int
 	Verbose int
@@ -32,7 +33,8 @@ var Opts OptsT
 func cutCLI(ctx *cli.Context) error {
 	rootArgv := ctx.RootArgv().(*rootT)
 	argv := ctx.Argv().(*cutT)
-	Opts.Gap, Opts.Pod, Opts.Verbose = argv.Gap, argv.Pod, rootArgv.Verbose.Value()
+	Opts.DFN, Opts.Gap, Opts.Pod, Opts.Verbose =
+		rootArgv.DFN, argv.Gap, argv.Pod, rootArgv.Verbose.Value()
 	ctx.JSON(Opts)
 	fmt.Println()
 
