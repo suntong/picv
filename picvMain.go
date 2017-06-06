@@ -20,8 +20,8 @@ import (
 
 var (
 	progname  = "picv"
-	VERSION   = "0.2.0"
-	buildTime = "2017-06-03"
+	VERSION   = "0.2.1"
+	buildTime = "2017-06-05"
 )
 
 ////////////////////////////////////////////////////////////////////////////
@@ -29,6 +29,7 @@ var (
 
 // Function main
 func main() {
+	cli.SetUsageStyle(cli.ManualStyle) // up-down style
 	//NOTE: You can set any writer implements io.Writer
 	// default writer is os.Stdout
 	if err := cli.Root(root,
@@ -48,4 +49,22 @@ func picv(ctx *cli.Context) error {
 	fmt.Println()
 
 	return nil
+}
+
+//==========================================================================
+// support functions
+
+// abortOn will quit on anticipated errors gracefully without stack trace
+func abortOn(errCase string, e error) {
+	if e != nil {
+		fmt.Fprintf(os.Stderr, "[%s] %s error: %v\n", progname, errCase, e)
+		os.Exit(1)
+	}
+}
+
+// verbose will print info to stderr according to the verbose level setting
+func verbose(levelSet, levelNow int, format string, args ...interface{}) {
+	if levelNow >= levelSet {
+		fmt.Fprintf(os.Stderr, "["+progname+"] "+format+"\n", args...)
+	}
 }

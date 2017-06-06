@@ -13,11 +13,11 @@ NumArg: cli.AtLeast(1)
 #UsageLead: "Usage:\\n  picv [Options] dir [dirs...]"
 
 Options:
-  # - Name: Dir
-  #   Type: string
-  #   Flag: '*d,dir'
-  #   Usage: pic source dir
-  #   Value: "./"
+  - Name: DFN
+    Type: string
+    Flag: 'd,dfn'
+    Usage: directive file name, which contains the cutting directives
+    Value: "zz-directive"
 
   - Name: Verbose
     Type: cli.Counter

@@ -8,6 +8,9 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
 
 	"github.com/mkideal/cli"
 )
@@ -33,9 +36,31 @@ func cutCLI(ctx *cli.Context) error {
 	ctx.JSON(Opts)
 	fmt.Println()
 
-	return picVault()
+	// visit the dirs provided on the command line
+	return picVault(ctx.Args())
 }
 
-func picVault() error {
+func picVault(dirs []string) error {
+	//fmt.Println(dirs)
+	for _, dir := range dirs {
+		verbose(1, Opts.Verbose, "Visting folder '%s'\n", dir)
+		os.Chdir(dir)
+		err := filepath.Walk(".", visitPic)
+		abortOn("File path walk", err)
+	}
+
+	return nil
+}
+
+func visitPic(path string, f os.FileInfo, err error) error {
+	// https://godoc.org/path/filepath#Walk
+	// https://godoc.org/os#FileInfo
+	if f.IsDir() {
+		verbose(2, Opts.Verbose, "Ignoring directory entry '%s'", path)
+	} else if strings.Contains(path, ".git/") {
+		verbose(3, Opts.Verbose, "Ignoring git entry '%s'", path)
+	} else {
+		fmt.Printf("  File: %s with %d bytes\n", path, f.Size())
+	}
 	return nil
 }
