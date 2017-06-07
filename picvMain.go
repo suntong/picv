@@ -11,6 +11,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"regexp"
 
 	"github.com/mkideal/cli"
 )
@@ -18,10 +19,14 @@ import (
 ////////////////////////////////////////////////////////////////////////////
 // Global variables definitions
 
+const dayFmt = "2006-01-02"
+
 var (
 	progname  = "picv"
 	VERSION   = "0.2.1"
 	buildTime = "2017-06-05"
+
+	imgRegex *regexp.Regexp
 )
 
 ////////////////////////////////////////////////////////////////////////////
@@ -29,6 +34,8 @@ var (
 
 // Function main
 func main() {
+	imgRegex, _ = regexp.Compile(`IMG.*\.jpg`)
+
 	cli.SetUsageStyle(cli.ManualStyle) // up-down style
 	//NOTE: You can set any writer implements io.Writer
 	// default writer is os.Stdout
