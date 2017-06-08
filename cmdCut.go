@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"time"
 
@@ -43,6 +44,7 @@ var (
 func cutCLI(ctx *cli.Context) error {
 	rootArgv := ctx.RootArgv().(*rootT)
 	argv := ctx.Argv().(*cutT)
+	imgRegex, _ = regexp.Compile(rootArgv.Glob)
 	Opts.DFN, Opts.Gap, Opts.Pod, Opts.Verbose =
 		rootArgv.DFN, argv.Gap, argv.Pod, rootArgv.Verbose.Value()
 	// ctx.JSON(Opts)
@@ -89,11 +91,12 @@ func (cut *cuttingT) CutPods(f os.FileInfo) {
 	// https://godoc.org/time
 	// set lastDate to the first file date
 	if !imgRegex.MatchString(f.Name()) {
+		verbose(3, Opts.Verbose, "File '%s' ignored", f.Name())
 		return
 	}
 	fDay := f.ModTime().Format(dayFmt)
 	if cut.picFiles == 0 {
-		verbose(1, Opts.Verbose, "%d: %s, %s", cut.picFiles, f.Name(), fDay)
+		verbose(1, Opts.Verbose, "> %s, %s", f.Name(), fDay)
 	}
 	cut.picFiles++
 	verbose(2, Opts.Verbose, "%d: %s, %s", cut.picFiles, f.Name(), fDay)
@@ -102,7 +105,7 @@ func (cut *cuttingT) CutPods(f os.FileInfo) {
 	}
 	if cut.picFiles > Opts.Pod &&
 		int(f.ModTime().Sub(cut.lastDate).Hours()) > Opts.Gap*24 {
-		verbose(1, Opts.Verbose, "%d: %s, %s", cut.picFiles, f.Name(), fDay)
+		verbose(1, Opts.Verbose, "< %s, %s", f.Name(), fDay)
 		// create a new pod
 		fmt.Fprintln(cut.df, fDay)
 		cut.picFiles = 0

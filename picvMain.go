@@ -34,8 +34,6 @@ var (
 
 // Function main
 func main() {
-	imgRegex, _ = regexp.Compile(`IMG.*\.jpg`)
-
 	cli.SetUsageStyle(cli.ManualStyle) // up-down style
 	//NOTE: You can set any writer implements io.Writer
 	// default writer is os.Stdout

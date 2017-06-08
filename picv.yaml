@@ -13,6 +13,12 @@ NumArg: cli.AtLeast(1)
 #UsageLead: "Usage:\\n  picv [Options] dir [dirs...]"
 
 Options:
+  - Name: Glob
+    Type: string
+    Flag: 'G,glob'
+    Usage: glob defines the image files matching pattern
+    Value: '(?i)IMG.*\\.jpg'
+
   - Name: DFN
     Type: string
     Flag: 'd,dfn'

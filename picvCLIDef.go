@@ -18,6 +18,7 @@ import (
 
 type rootT struct {
 	cli.Helper
+	Glob    string      `cli:"G,glob" usage:"glob defines the image files matching pattern" dft:"(?i)IMG.*\\.jpg"`
 	DFN     string      `cli:"d,dfn" usage:"directive file name, which contains the cutting directives" dft:"zz-directive"`
 	Verbose cli.Counter `cli:"v,verbose" usage:"Verbose mode (Multiple -v options increase the verbosity.)"`
 }
@@ -40,7 +41,7 @@ var root = &cli.Command{
 //  var (
 //          progname  = "picv"
 //          VERSION   = "0.1.0"
-//          buildTime = "2017-06-05"
+//          buildTime = "2017-06-07"
 //  )
 
 ////////////////////////////////////////////////////////////////////////////
