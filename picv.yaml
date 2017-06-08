@@ -17,7 +17,7 @@ Options:
     Type: string
     Flag: 'G,glob'
     Usage: glob defines the image files matching pattern
-    Value: 'IMG.*\\.jpg'
+    Value: '.*\\.jpg'
 
   - Name: Case
     Type: bool

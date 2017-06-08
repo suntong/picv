@@ -33,6 +33,9 @@ type cuttingT struct {
 	lastDate time.Time
 }
 
+////////////////////////////////////////////////////////////////////////////
+// Global variables definitions
+
 var (
 	Opts OptsT
 	cut  cuttingT
@@ -44,7 +47,7 @@ var (
 func cutCLI(ctx *cli.Context) error {
 	rootArgv := ctx.RootArgv().(*rootT)
 	argv := ctx.Argv().(*cutT)
-	imgRegex, _ = regexp.Compile(gcm[rootArgv.Case] + rootArgv.Glob)
+	imgRegex, _ = regexp.Compile(gcm[rootArgv.Case] + rootArgv.Glob + "$")
 	Opts.DFN, Opts.Gap, Opts.Pod, Opts.Verbose =
 		rootArgv.DFN, argv.Gap, argv.Pod, rootArgv.Verbose.Value()
 	// ctx.JSON(Opts)
@@ -64,7 +67,7 @@ func picVault(dirs []string) error {
 		var err error
 		cut.df, err = os.Create(Opts.DFN)
 		abortOn("Creating directive file", err)
-		err = filepath.Walk(".", createPods)
+		err = filepath.Walk(".", buildupPods)
 		abortOn("File path walk", err)
 		err = cut.df.Close()
 		abortOn("Closing directive file", err)
@@ -73,7 +76,7 @@ func picVault(dirs []string) error {
 	return nil
 }
 
-func createPods(path string, f os.FileInfo, err error) error {
+func buildupPods(path string, f os.FileInfo, err error) error {
 	// https://godoc.org/path/filepath#Walk
 	// https://godoc.org/os#FileInfo
 	if f.IsDir() {
@@ -96,20 +99,20 @@ func (cut *cuttingT) CutPods(f os.FileInfo) {
 	}
 	fDay := f.ModTime().Format(dayFmt)
 	if cut.picFiles == 0 {
-		verbose(1, Opts.Verbose, "> %s, %s", f.Name(), fDay)
+		verbose(1, Opts.Verbose, ">  %s, %s", f.Name(), fDay)
 	}
 	cut.picFiles++
-	verbose(2, Opts.Verbose, "%d: %s, %s", cut.picFiles, f.Name(), fDay)
 	if cut.lastDate.IsZero() {
 		cut.lastDate = f.ModTime()
+		fmt.Fprintln(cut.df, fDay)
 	}
 	if cut.picFiles > Opts.Pod &&
 		int(f.ModTime().Sub(cut.lastDate).Hours()) > Opts.Gap*24 {
-		verbose(1, Opts.Verbose, "< %s, %s", f.Name(), fDay)
+		verbose(1, Opts.Verbose, "<  %s, %s", f.Name(), fDay)
 		// create a new pod
 		fmt.Fprintln(cut.df, fDay)
 		cut.picFiles = 0
 	}
+	verbose(2, Opts.Verbose, "%d: %s, %s", cut.picFiles, f.Name(), fDay)
 	cut.lastDate = f.ModTime()
-
 }

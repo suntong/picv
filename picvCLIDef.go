@@ -18,7 +18,7 @@ import (
 
 type rootT struct {
 	cli.Helper
-	Glob    string      `cli:"G,glob" usage:"glob defines the image files matching pattern" dft:"(?i)IMG.*\\.jpg"`
+	Glob    string      `cli:"G,glob" usage:"glob defines the image files matching pattern" dft:".*\\.jpg"`
 	Case    bool        `cli:"C,case-sensitive" usage:"case-sensitive for glob files pattern matching"`
 	DFN     string      `cli:"d,dfn" usage:"directive file name, which contains the cutting directives" dft:"zz-directive"`
 	Verbose cli.Counter `cli:"v,verbose" usage:"Verbose mode (Multiple -v options increase the verbosity.)"`
