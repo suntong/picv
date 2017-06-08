@@ -75,9 +75,9 @@ func createPods(path string, f os.FileInfo, err error) error {
 	// https://godoc.org/path/filepath#Walk
 	// https://godoc.org/os#FileInfo
 	if f.IsDir() {
-		verbose(2, Opts.Verbose, "Ignoring directory entry '%s'", path)
+		verbose(3, Opts.Verbose, "Ignoring directory entry '%s'", path)
 	} else if strings.Contains(path, ".git/") {
-		verbose(3, Opts.Verbose, "Ignoring git entry '%s'", path)
+		verbose(4, Opts.Verbose, "Ignoring git entry '%s'", path)
 	} else {
 		//fmt.Printf("  File: %s with %d bytes\n", path, f.Size())
 		cut.CutPods(f)
@@ -91,16 +91,20 @@ func (cut *cuttingT) CutPods(f os.FileInfo) {
 	if !imgRegex.MatchString(f.Name()) {
 		return
 	}
+	fDay := f.ModTime().Format(dayFmt)
+	if cut.picFiles == 0 {
+		verbose(1, Opts.Verbose, "%d: %s, %s", cut.picFiles, f.Name(), fDay)
+	}
 	cut.picFiles++
-	verbose(1, Opts.Verbose, "%d: %s, %s",
-		cut.picFiles, f.Name(), f.ModTime().Format(dayFmt))
+	verbose(2, Opts.Verbose, "%d: %s, %s", cut.picFiles, f.Name(), fDay)
 	if cut.lastDate.IsZero() {
 		cut.lastDate = f.ModTime()
 	}
 	if cut.picFiles > Opts.Pod &&
 		int(f.ModTime().Sub(cut.lastDate).Hours()) > Opts.Gap*24 {
+		verbose(1, Opts.Verbose, "%d: %s, %s", cut.picFiles, f.Name(), fDay)
 		// create a new pod
-		fmt.Fprintln(cut.df, f.ModTime().Format(dayFmt))
+		fmt.Fprintln(cut.df, fDay)
 		cut.picFiles = 0
 	}
 	cut.lastDate = f.ModTime()
