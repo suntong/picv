@@ -44,7 +44,7 @@ var (
 func cutCLI(ctx *cli.Context) error {
 	rootArgv := ctx.RootArgv().(*rootT)
 	argv := ctx.Argv().(*cutT)
-	imgRegex, _ = regexp.Compile(rootArgv.Glob)
+	imgRegex, _ = regexp.Compile(gcm[rootArgv.Case] + rootArgv.Glob)
 	Opts.DFN, Opts.Gap, Opts.Pod, Opts.Verbose =
 		rootArgv.DFN, argv.Gap, argv.Pod, rootArgv.Verbose.Value()
 	// ctx.JSON(Opts)

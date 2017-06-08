@@ -17,16 +17,23 @@ import (
 )
 
 ////////////////////////////////////////////////////////////////////////////
-// Global variables definitions
+// Constant and data type/structure definitions
 
 const dayFmt = "2006-01-02"
+
+// glob case map
+type gcmT map[bool]string
+
+////////////////////////////////////////////////////////////////////////////
+// Global variables definitions
 
 var (
 	progname  = "picv"
 	VERSION   = "0.2.1"
-	buildTime = "2017-06-05"
+	buildTime = "2017-06-08"
 
 	imgRegex *regexp.Regexp
+	gcm      gcmT
 )
 
 ////////////////////////////////////////////////////////////////////////////
@@ -34,6 +41,8 @@ var (
 
 // Function main
 func main() {
+	gcm = gcmT{false: "", true: `(?i)`}
+
 	cli.SetUsageStyle(cli.ManualStyle) // up-down style
 	//NOTE: You can set any writer implements io.Writer
 	// default writer is os.Stdout
