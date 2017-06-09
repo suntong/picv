@@ -106,12 +106,16 @@ func (cut *cuttingT) CutPods(f os.FileInfo) {
 		cut.lastDate = f.ModTime()
 		fmt.Fprintln(cut.df, fDay)
 	}
-	if cut.picFiles > Opts.Pod &&
-		int(f.ModTime().Sub(cut.lastDate).Hours()) > Opts.Gap*24 {
-		verbose(1, Opts.Verbose, "<  %s, %s", f.Name(), fDay)
-		// create a new pod
-		fmt.Fprintln(cut.df, fDay)
-		cut.picFiles = 0
+	if cut.picFiles > Opts.Pod {
+		correction := float32(cut.picFiles-Opts.Pod) / float32(Opts.Pod)
+		correction *= correction
+		if int(f.ModTime().Sub(cut.lastDate).Hours()) >
+			int((float32(Opts.Gap)-correction)*24) {
+			verbose(1, Opts.Verbose, "<  %s, %s", f.Name(), fDay)
+			// create a new pod
+			fmt.Fprintln(cut.df, fDay)
+			cut.picFiles = 0
+		}
 	}
 	verbose(2, Opts.Verbose, "%d: %s, %s", cut.picFiles, f.Name(), fDay)
 	cut.lastDate = f.ModTime()
