@@ -9,9 +9,7 @@ package main
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 	"regexp"
-	"strings"
 	"time"
 
 	"github.com/mkideal/cli"
@@ -67,7 +65,7 @@ func picVault(dirs []string) error {
 		var err error
 		cut.df, err = os.Create(Opts.DFN)
 		abortOn("Creating directive file", err)
-		err = filepath.Walk(".", buildupPods)
+		err = fileWalkByTime(".", buildupPods)
 		abortOn("File path walk", err)
 		err = cut.df.Close()
 		abortOn("Closing directive file", err)
@@ -76,17 +74,8 @@ func picVault(dirs []string) error {
 	return nil
 }
 
-func buildupPods(path string, f os.FileInfo, err error) error {
-	// https://godoc.org/path/filepath#Walk
-	// https://godoc.org/os#FileInfo
-	if f.IsDir() {
-		verbose(3, Opts.Verbose, "Ignoring directory entry '%s'", path)
-	} else if strings.Contains(path, ".git/") {
-		verbose(4, Opts.Verbose, "Ignoring git entry '%s'", path)
-	} else {
-		//fmt.Printf("  File: %s with %d bytes\n", path, f.Size())
-		cut.CutPods(f)
-	}
+func buildupPods(f os.FileInfo) error {
+	cut.CutPods(f)
 	return nil
 }
 

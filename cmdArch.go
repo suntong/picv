@@ -9,7 +9,6 @@ package main
 import (
 	"bufio"
 	"os"
-	"path/filepath"
 	"regexp"
 	"time"
 
@@ -64,7 +63,7 @@ func picArch(dirs []string) error {
 		abortOn("Opening directive file", err)
 		// create a new scanner and read the file line by line
 		arch.scanner = bufio.NewScanner(file)
-		err = filepath.Walk(".", createPods)
+		err = fileWalkByTime(".", createPods)
 		abortOn("File path walk", err)
 		err = file.Close()
 		abortOn("Closing directive file", err)
@@ -72,14 +71,7 @@ func picArch(dirs []string) error {
 	return nil
 }
 
-func createPods(path string, f os.FileInfo, err error) error {
-	if f.IsDir() {
-		return nil
-	}
-	if regexp.MustCompile("/").MatchString(path) {
-		verbose(3, rootOpts.Verbose, "File '%s' ignored", path)
-		return nil
-	}
+func createPods(f os.FileInfo) error {
 	return arch.ArchPods(f)
 }
 
