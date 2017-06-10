@@ -42,7 +42,7 @@ var root = &cli.Command{
 //  var (
 //          progname  = "picv"
 //          VERSION   = "0.1.0"
-//          buildTime = "2017-06-08"
+//          buildTime = "2017-06-10"
 //  )
 
 ////////////////////////////////////////////////////////////////////////////
@@ -96,6 +96,7 @@ var cutDef = &cli.Command{
 	Argv: func() interface{} { return new(cutT) },
 	Fn:   cutCLI,
 
+	NumArg:      cli.AtLeast(1),
 	CanSubRoute: true,
 }
 
@@ -118,5 +119,6 @@ var archDef = &cli.Command{
 	Argv: func() interface{} { return new(archT) },
 	Fn:   archCLI,
 
+	NumArg:      cli.AtLeast(1),
 	CanSubRoute: true,
 }
