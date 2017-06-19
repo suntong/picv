@@ -86,9 +86,6 @@ func (cut *cuttingT) CutPods(f os.FileInfo) {
 		verbose(3, Opts.Verbose, "File '%s' ignored", f.Name())
 		return
 	}
-	// Get the actual file date, instead of the symlink's
-	f, err := os.Stat(f.Name())
-	abortOn("Get file stat", err)
 	fDay := f.ModTime().Format(dayFmt)
 	if cut.picFiles == 0 {
 		verbose(1, Opts.Verbose, ">  %s, %s", f.Name(), fDay)
