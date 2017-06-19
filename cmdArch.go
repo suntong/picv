@@ -82,6 +82,7 @@ func (arch *archingT) ArchPods(f os.FileInfo) error {
 		verbose(3, rootOpts.Verbose, "File '%s' ignored", f.Name())
 		return nil
 	}
+	// Get the actual file date, instead of the symlink's
 	f, err := os.Stat(f.Name())
 	abortOn("Get file stat", err)
 	fName, fDay := f.Name(), f.ModTime().Format(dayFmt)
