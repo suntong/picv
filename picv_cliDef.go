@@ -1,13 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////
 // Program: picv
 // Purpose: picture vault
-// Authors: Tong Sun (c) 2017, All rights reserved
+// Authors: Tong Sun (c) 2018, All rights reserved
 ////////////////////////////////////////////////////////////////////////////
 
 package main
 
 import (
-	"github.com/mkideal/cli"
+	"github.com/go-easygen/cli"
 )
 
 ////////////////////////////////////////////////////////////////////////////
@@ -26,7 +26,7 @@ type rootT struct {
 
 var root = &cli.Command{
 	Name:   "picv",
-	Desc:   "picture vault\nbuilt on " + buildTime,
+	Desc:   "picture vault\nVersion " + version + " built on " + date,
 	Text:   "Tool to deal with camera pictures and put them in vault",
 	Global: true,
 	Argv:   func() interface{} { return new(rootT) },
@@ -37,12 +37,28 @@ var root = &cli.Command{
 
 // Template for main starts here
 ////////////////////////////////////////////////////////////////////////////
+// Constant and data type/structure definitions
+
+// The OptsT type defines all the configurable options from cli.
+//  type OptsT struct {
+//  	Glob	string
+//  	Case	bool
+//  	DFN	string
+//  	Verbose	cli.Counter
+//  	Verbose int
+//  }
+
+////////////////////////////////////////////////////////////////////////////
 // Global variables definitions
 
 //  var (
 //          progname  = "picv"
-//          VERSION   = "0.1.0"
-//          buildTime = "2017-06-10"
+//          version   = "0.1.0"
+//          date = "2018-06-21"
+
+//  	rootArgv *rootT
+//  	// Opts store all the configurable options
+//  	Opts OptsT
 //  )
 
 ////////////////////////////////////////////////////////////////////////////
@@ -50,7 +66,7 @@ var root = &cli.Command{
 
 // Function main
 //  func main() {
-//  	cli.SetUsageStyle(cli.ManualStyle) // up-down, for left-right, use NormalStyle
+//  	cli.SetUsageStyle(cli.DenseNormalStyle) // left-right, for up-down, use ManualStyle
 //  	//NOTE: You can set any writer implements io.Writer
 //  	// default writer is os.Stdout
 //  	if err := cli.Root(root,
@@ -78,12 +94,21 @@ var root = &cli.Command{
 ////////////////////////////////////////////////////////////////////////////
 // cut
 
-// func cutCLI(ctx *cli.Context) error {
-// 	rootArgv = ctx.RootArgv().(*rootT)
-// 	argv := ctx.Argv().(*cutT)
-// 	fmt.Printf("[cut]:\n  %+v\n  %+v\n  %v\n", rootArgv, argv, ctx.Args())
-// 	return nil
-// }
+//  func cutCLI(ctx *cli.Context) error {
+//  	rootArgv = ctx.RootArgv().(*rootT)
+//  	argv := ctx.Argv().(*cutT)
+//  	fmt.Printf("[cut]:\n  %+v\n  %+v\n  %v\n", rootArgv, argv, ctx.Args())
+//  	Opts.Glob, Opts.Case, Opts.DFN, Opts.Verbose, Opts.Verbose =
+//  		rootArgv.Glob, rootArgv.Case, rootArgv.DFN, rootArgv.Verbose, rootArgv.Verbose.Value()
+//  	return nil
+//  	//return DoCut()
+//  }
+//
+//  func DoCut() error {
+//  	fmt.Printf("%s v %s. Separate picture into groups\n", progname, version)
+//  	fmt.Println("Copyright (C) 2018, Tong Sun")
+//  	return nil
+//  }
 
 type cutT struct {
 	Gap int `cli:"g,gap" usage:"Gap in days to be considered as different group/vault" dft:"5"`
@@ -93,6 +118,7 @@ type cutT struct {
 var cutDef = &cli.Command{
 	Name: "cut",
 	Desc: "Separate picture into groups",
+
 	Argv: func() interface{} { return new(cutT) },
 	Fn:   cutCLI,
 
@@ -103,12 +129,21 @@ var cutDef = &cli.Command{
 ////////////////////////////////////////////////////////////////////////////
 // arch
 
-// func archCLI(ctx *cli.Context) error {
-// 	rootArgv = ctx.RootArgv().(*rootT)
-// 	argv := ctx.Argv().(*archT)
-// 	fmt.Printf("[arch]:\n  %+v\n  %+v\n  %v\n", rootArgv, argv, ctx.Args())
-// 	return nil
-// }
+//  func archCLI(ctx *cli.Context) error {
+//  	rootArgv = ctx.RootArgv().(*rootT)
+//  	argv := ctx.Argv().(*archT)
+//  	fmt.Printf("[arch]:\n  %+v\n  %+v\n  %v\n", rootArgv, argv, ctx.Args())
+//  	Opts.Glob, Opts.Case, Opts.DFN, Opts.Verbose, Opts.Verbose =
+//  		rootArgv.Glob, rootArgv.Case, rootArgv.DFN, rootArgv.Verbose, rootArgv.Verbose.Value()
+//  	return nil
+//  	//return DoArch()
+//  }
+//
+//  func DoArch() error {
+//  	fmt.Printf("%s v %s. Archive groups of picture into vaults\n", progname, version)
+//  	fmt.Println("Copyright (C) 2018, Tong Sun")
+//  	return nil
+//  }
 
 type archT struct {
 }
@@ -116,6 +151,7 @@ type archT struct {
 var archDef = &cli.Command{
 	Name: "arch",
 	Desc: "Archive groups of picture into vaults",
+
 	Argv: func() interface{} { return new(archT) },
 	Fn:   archCLI,
 

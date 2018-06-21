@@ -1,19 +1,19 @@
 ////////////////////////////////////////////////////////////////////////////
 // Program: picv
 // Purpose: picture vault
-// Authors: Tong Sun (c) 2017, All rights reserved
+// Authors: Tong Sun (c) 2017-2018, All rights reserved
 ////////////////////////////////////////////////////////////////////////////
 
 package main
 
-//go:generate sh -v picvCLIGen.sh
+//go:generate sh -v picv_cliGen.sh
 
 import (
 	"fmt"
 	"os"
 	"regexp"
 
-	"github.com/mkideal/cli"
+	"github.com/go-easygen/cli"
 )
 
 ////////////////////////////////////////////////////////////////////////////
@@ -28,9 +28,9 @@ type gcmT map[bool]string
 // Global variables definitions
 
 var (
-	progname  = "picv"
-	VERSION   = "0.2.1"
-	buildTime = "2017-06-08"
+	progname = "picv"
+	version  = "0.2.1"
+	date     = "2018-06-21"
 
 	imgRegex *regexp.Regexp
 	gcm      gcmT
@@ -43,6 +43,7 @@ var (
 func main() {
 	gcm = gcmT{false: "", true: `(?i)`}
 
+	// cli.SetUsageStyle(cli.DenseNormalStyle) // left-right, for up-down, use ManualStyle
 	cli.SetUsageStyle(cli.ManualStyle) // up-down style
 	//NOTE: You can set any writer implements io.Writer
 	// default writer is os.Stdout
