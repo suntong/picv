@@ -7,7 +7,10 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/go-easygen/cli"
+	"github.com/go-easygen/cli/clis"
 )
 
 ////////////////////////////////////////////////////////////////////////////
@@ -79,7 +82,7 @@ var root = &cli.Command{
 
 // Template for main dispatcher starts here
 //==========================================================================
-// Main dispatcher
+// Dumb root handler
 
 //  func picv(ctx *cli.Context) error {
 //  	ctx.JSON(ctx.RootArgv())
@@ -97,11 +100,12 @@ var root = &cli.Command{
 //  func cutCLI(ctx *cli.Context) error {
 //  	rootArgv = ctx.RootArgv().(*rootT)
 //  	argv := ctx.Argv().(*cutT)
-//  	fmt.Printf("[cut]:\n  %+v\n  %+v\n  %v\n", rootArgv, argv, ctx.Args())
+//  	clis.Verbose(2, "[cut]:\n  %+v\n  %+v\n  %v\n", rootArgv, argv, ctx.Args())
 //  	Opts.Glob, Opts.Case, Opts.DFN, Opts.Verbose, Opts.Verbose =
 //  		rootArgv.Glob, rootArgv.Case, rootArgv.DFN, rootArgv.Verbose, rootArgv.Verbose.Value()
-//  	return nil
-//  	//return DoCut()
+//  	clis.Setup(progname, Opts.Verbose)
+//  	//return nil
+//  	return DoCut()
 //  }
 //
 //  func DoCut() error {
@@ -132,11 +136,12 @@ var cutDef = &cli.Command{
 //  func archCLI(ctx *cli.Context) error {
 //  	rootArgv = ctx.RootArgv().(*rootT)
 //  	argv := ctx.Argv().(*archT)
-//  	fmt.Printf("[arch]:\n  %+v\n  %+v\n  %v\n", rootArgv, argv, ctx.Args())
+//  	clis.Verbose(2, "[arch]:\n  %+v\n  %+v\n  %v\n", rootArgv, argv, ctx.Args())
 //  	Opts.Glob, Opts.Case, Opts.DFN, Opts.Verbose, Opts.Verbose =
 //  		rootArgv.Glob, rootArgv.Case, rootArgv.DFN, rootArgv.Verbose, rootArgv.Verbose.Value()
-//  	return nil
-//  	//return DoArch()
+//  	clis.Setup(progname, Opts.Verbose)
+//  	//return nil
+//  	return DoArch()
 //  }
 //
 //  func DoArch() error {
