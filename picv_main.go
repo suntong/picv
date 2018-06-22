@@ -65,21 +65,3 @@ func picv(ctx *cli.Context) error {
 
 	return nil
 }
-
-//==========================================================================
-// support functions
-
-// abortOn will quit on anticipated errors gracefully without stack trace
-func abortOn(errCase string, e error) {
-	if e != nil {
-		fmt.Fprintf(os.Stderr, "[%s] %s error: %v\n", progname, errCase, e)
-		os.Exit(1)
-	}
-}
-
-// verbose will print info to stderr according to the verbose level setting
-func verbose(levelSet, levelNow int, format string, args ...interface{}) {
-	if levelNow >= levelSet {
-		fmt.Fprintf(os.Stderr, "["+progname+"] "+format+"\n", args...)
-	}
-}

@@ -11,6 +11,8 @@ package main
 import (
 	"os"
 	"sort"
+
+	"github.com/go-easygen/cli/clis"
 )
 
 type WalkFunc func(info os.FileInfo) error
@@ -31,10 +33,10 @@ func (fis ByModTime) Less(i, j int) bool {
 
 func fileWalkByTime(root string, walkFn WalkFunc) error {
 	f, err := os.Open(root)
-	abortOn("Open directory", err)
+	clis.AbortOn("Open directory", err)
 	fis, err := f.Readdir(-1)
 	f.Close()
-	abortOn("Read directory", err)
+	clis.AbortOn("Read directory", err)
 	// Get the actual file's FileInfo, instead of the symlink's
 	// Readdir returns a slice of FileInfo values, as would be returned by Lstat
 	// Lstat makes no attempt to follow the link, while Stat does

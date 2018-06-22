@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/go-easygen/cli"
+	"github.com/go-easygen/cli/clis"
 )
 
 ////////////////////////////////////////////////////////////////////////////
@@ -48,8 +49,9 @@ func cutCLI(ctx *cli.Context) error {
 	imgRegex, _ = regexp.Compile(gcm[rootArgv.Case] + rootArgv.Glob + "$")
 	Opts.DFN, Opts.Gap, Opts.Pod, Opts.Verbose =
 		rootArgv.DFN, argv.Gap, argv.Pod, rootArgv.Verbose.Value()
-	// ctx.JSON(Opts)
-	// fmt.Println()
+	clis.Setup(progname, Opts.Verbose)
+	ctx.JSON(Opts)
+	fmt.Println()
 
 	// visit the dirs provided on the command line
 	return picVault(ctx.Args())
@@ -59,16 +61,16 @@ func picVault(dirs []string) error {
 
 	//fmt.Println(dirs)
 	for _, dir := range dirs {
-		verbose(1, Opts.Verbose, "Visting folder '%s'\n", dir)
+		clis.Verbose(1, "Visting folder '%s'\n", dir)
 		os.Chdir(dir)
 		// open output file
 		var err error
 		cut.df, err = os.Create(Opts.DFN)
-		abortOn("Creating directive file", err)
+		clis.AbortOn("Creating directive file", err)
 		err = fileWalkByTime(".", buildupPods)
-		abortOn("File path walk", err)
+		clis.AbortOn("File path walk", err)
 		err = cut.df.Close()
-		abortOn("Closing directive file", err)
+		clis.AbortOn("Closing directive file", err)
 	}
 
 	return nil
@@ -83,12 +85,12 @@ func (cut *cuttingT) CutPods(f os.FileInfo) {
 	// https://godoc.org/time
 	// set lastDate to the first file date
 	if !imgRegex.MatchString(f.Name()) {
-		verbose(3, Opts.Verbose, "File '%s' ignored", f.Name())
+		clis.Verbose(3, "File '%s' ignored", f.Name())
 		return
 	}
 	fDay := f.ModTime().Format(dayFmt)
 	if cut.picFiles == 0 {
-		verbose(1, Opts.Verbose, ">  %s, %s", f.Name(), fDay)
+		clis.Verbose(1, ">  %s, %s", f.Name(), fDay)
 	}
 	cut.picFiles++
 	if cut.lastDate.IsZero() {
@@ -100,12 +102,12 @@ func (cut *cuttingT) CutPods(f os.FileInfo) {
 		correction *= correction
 		if int(f.ModTime().Sub(cut.lastDate).Hours()) >
 			int((float32(Opts.Gap)-correction)*24) {
-			verbose(1, Opts.Verbose, "<  %s, %s", f.Name(), fDay)
+			clis.Verbose(1, "<  %s, %s", f.Name(), fDay)
 			// create a new pod
 			fmt.Fprintln(cut.df, fDay)
 			cut.picFiles = 0
 		}
 	}
-	verbose(2, Opts.Verbose, "%d: %s, %s", cut.picFiles, f.Name(), fDay)
+	clis.Verbose(2, "%d: %s, %s", cut.picFiles, f.Name(), fDay)
 	cut.lastDate = f.ModTime()
 }
